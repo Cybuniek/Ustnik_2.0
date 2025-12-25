@@ -13,8 +13,8 @@ import neonSymbol from "@assets/generated_images/neon_glitch_artistic_symbol.png
 
 const SECTIONS = [
   { id: "home", label: "HOME", icon: Monitor },
-  { id: "show", label: "SHOW", icon: Ticket },
-  { id: "scena", label: "SCENA", icon: Mic2 },
+  { id: "scena", label: "WYSTĘP", icon: Mic2 },
+  { id: "show", label: "FILMIKI", icon: Ticket },
   { id: "muzyka", label: "MUZYKA", icon: Music },
   { id: "kontakt", label: "KONTAKT", icon: Mail },
 ];
@@ -184,6 +184,44 @@ function Section({ id, title, children, className }: { id: string, title: string
   );
 }
 
+function Countdown() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 12,
+    hours: 5,
+    minutes: 43,
+    seconds: 12
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const Unit = ({ value, label }: { value: number, label: string }) => (
+    <div className="flex flex-col items-center px-4 md:px-8 border-r border-white/10 last:border-0">
+      <span className="text-4xl md:text-6xl font-glitch text-neon-blue">{value.toString().padStart(2, '0')}</span>
+      <span className="text-[10px] md:text-xs text-neon-blue/60 tracking-widest mt-2">{label}</span>
+    </div>
+  );
+
+  return (
+    <div className="flex justify-center items-center py-12 bg-black/40 border border-neon-blue/20 box-glow-blue">
+      <Unit value={timeLeft.days} label="DNI" />
+      <Unit value={timeLeft.hours} label="GODZINY" />
+      <Unit value={timeLeft.minutes} label="MINUTY" />
+      <Unit value={timeLeft.seconds} label="SEKUNDY" />
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-neon-pink selection:text-white font-mono overflow-x-hidden">
@@ -204,42 +242,47 @@ export default function Home() {
       <main className="relative z-10">
         <Hero />
         
-        <Section id="show" title="THE SHOW" className="bg-black/50">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="bg-black/40 border border-neon-green/30 p-8 hover:border-neon-green transition-all duration-300 group">
-              <h3 className="text-2xl text-white font-glitch mb-4 group-hover:text-neon-green">CYBER PERFORMANCE</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Eksperymentalne połączenie sztuki cyfrowej, muzyki elektronicznej i performansu na żywo.
-                Zanurz się w świecie, gdzie granice między rzeczywistością a symulacją przestają istnieć.
-              </p>
-              <div className="mt-6 h-40 bg-neon-green/5 w-full flex items-center justify-center border border-neon-green/10">
-                <span className="text-neon-green/50 text-xs">VISUAL PREVIEW_01</span>
-              </div>
-            </Card>
-            
-            <Card className="bg-black/40 border border-neon-pink/30 p-8 hover:border-neon-pink transition-all duration-300 group">
-              <h3 className="text-2xl text-white font-glitch mb-4 group-hover:text-neon-pink">DIGITAL INSTALLATION</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Interaktywne instalacje reagujące na ruch i dźwięk. 
-                Twoja obecność zmienia kształt cyfrowej przestrzeni.
-              </p>
-              <div className="mt-6 h-40 bg-neon-pink/5 w-full flex items-center justify-center border border-neon-pink/10">
-                <span className="text-neon-pink/50 text-xs">VISUAL PREVIEW_02</span>
-              </div>
-            </Card>
+        <Section id="scena" title="WYSTĘP">
+          <div className="space-y-12">
+            <div className="text-center space-y-4">
+              <h3 className="text-2xl font-mono text-neon-blue tracking-[0.3em]">NASTĘPNA TRANSMISJA LIVE</h3>
+              <Countdown />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Card className="bg-black/40 border border-neon-blue/30 p-8 hover:border-neon-blue transition-all duration-300 group">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-2xl text-white font-glitch group-hover:text-neon-blue">SESSION_042</h3>
+                  <span className="text-neon-blue text-xs border border-neon-blue px-2 py-1 animate-pulse">UPCOMING</span>
+                </div>
+                <p className="text-gray-400 leading-relaxed mb-6 font-mono">
+                  Data: 2025.05.20 <br/>
+                  Lokalizacja: PORTAL_VIRTUAL_A <br/>
+                  Typ: Immersive AV Live Set
+                </p>
+                <Button className="w-full bg-transparent border border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-black">DODAJ DO KALENDARZA</Button>
+              </Card>
+            </div>
           </div>
         </Section>
 
-        <Section id="scena" title="SCENA">
-          <div className="relative border border-white/20 h-[500px] w-full bg-black/50 flex items-center justify-center overflow-hidden group">
-            <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(57,255,20,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            
-            <div className="text-center z-10">
-              <GlitchText text="LIVE STREAM" className="text-4xl md:text-6xl mb-4" color="blue" />
-              <p className="text-neon-blue font-mono tracking-widest animate-pulse">OFFLINE // NEXT EVENT: 2025.05.20</p>
-            </div>
-            
-            <div className="absolute bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-blue to-transparent" />
+        <Section id="show" title="FILMIKI" className="bg-black/50">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="bg-black/40 border border-neon-pink/20 hover:border-neon-pink transition-all duration-300 group overflow-hidden cursor-pointer">
+                <div className="aspect-video bg-neon-pink/5 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Ticket className="text-neon-pink/20 group-hover:scale-110 transition-transform duration-500" size={48} />
+                  <div className="absolute bottom-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-neon-pink font-mono">PLAY VIDEO_0{i}</span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h4 className="font-glitch text-lg text-white group-hover:text-neon-pink transition-colors">ARCHIWUM_V0{i}</h4>
+                  <p className="text-[10px] text-gray-500 font-mono mt-1">RECORDED: 2025.01.{10+i} // 4K_RAW</p>
+                </div>
+              </Card>
+            ))}
           </div>
         </Section>
 

@@ -63,6 +63,9 @@
   .box-glow {
     box-shadow: 0 0 10px var(--color-neon-green), inset 0 0 5px var(--color-neon-green);
   }
+  .box-glow-blue {
+    box-shadow: 0 0 15px var(--color-neon-blue), inset 0 0 5px var(--color-neon-blue);
+  }
 }
 
 /* CRT Scanline Animation */
